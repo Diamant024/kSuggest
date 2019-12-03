@@ -1,25 +1,34 @@
 let rules = require('./rules');
 
-module.exports = {
+function AccessControl(permissions, action) {
 
-    getRules: function (permissions, action) {
+    let actionRules = permissions.reduce((accum, item) => {
+        let rule = rules[item] && rules[item][action];
 
-        const defaultRule = {
-            available: false,
-            beforeExec: new Function,
-            afterExec: new Function
-        };
+        rule && accum.push(rule);
 
-        let actionRules = permissions.reduce((accum, item) => {
-            if (!rules[item])
-                return accum;
+        return accum
+    }, []);
 
-            // Overwriting rules
-            return Object.assign(accum, rules[item])
-        }, {});
+    let actionAvailable = !actionRules.some(item => item.available === false);
 
-        let result = Object.assign(defaultRule, actionRules[action]);
+    return {
+        available: actionAvailable,
 
-        return result;
-    }
-};
+        beforeExec: () => {
+            for (let rule of actionRules) {
+                if (typeof rule.beforeExec === 'function')
+                    rule.beforeExec();
+            }
+        },
+
+        afterExec: () => {
+            for (let rule of actionRules) {
+                if (typeof rule.afterExec === 'function')
+                    rule.afterExec();
+            }
+        }
+    };
+}
+
+module.exports = AccessControl;

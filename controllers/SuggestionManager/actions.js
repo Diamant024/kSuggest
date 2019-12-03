@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 let SuggestionModel = mongoose.model('Suggestion'),
     SuggestionStatus = mongoose.model('SuggestionStatus');
 
+/**
+ * List of Suggestions
+ * @param options: { userId: String }
+ * @returns {Promise<Array>}
+ */
 function getList(options) {
     let query = SuggestionModel.find();
 
@@ -14,6 +19,11 @@ function getList(options) {
     });
 }
 
+/**
+ * Create new Suggestion
+ * @param options: { name: String, description: String, creatorId: String }
+ * @returns {Promise<Object>}
+ */
 function create(options) {
 
     let query = SuggestionModel.create({
@@ -28,7 +38,13 @@ function create(options) {
     return query.exec();
 }
 
+/**
+ * Edit exist Suggestion
+ * @param options: { id: String, }
+ * @returns {Promise<Object>}
+ */
 function edit(options) {
+
     let query = SuggestionModel.findOne({ _id: options.id });
 
     this.beforeExec(query, options);
@@ -44,7 +60,7 @@ function edit(options) {
 }
 
 module.exports = {
-    'getList': getList,
-    'create': create,
-    'edit': edit
+    getList,
+    create,
+    edit
 };

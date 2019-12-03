@@ -1,5 +1,5 @@
 const rules = {
-    'readOnlyOwn': {
+    'readOwnOnly': {
         'getList': {
             available: true,
             beforeExec: (query, options) => {
@@ -7,7 +7,7 @@ const rules = {
             }
         }
     },
-    'openDeclined': {
+    'setOwnDeclinedToChecking': {
         'edit': {
             available: true,
             beforeExec: (query, options) => {
