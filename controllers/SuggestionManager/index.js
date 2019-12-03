@@ -10,7 +10,7 @@ let actions = require('./actions');
 function SuggestionManager(userData) {
 
     for (let [key, value] of Object.entries(actions)) {
-        this[key] = () => {
+        this[key] = function () {
             let ac = AccessControl(userData.permissions, key);
 
             if (!ac.available)

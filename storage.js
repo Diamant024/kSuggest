@@ -22,22 +22,22 @@ function StorageConnector(config) {
     }
 
     mongoose.Promise = Promise;
-    //mongoose.set('debug', true);
-    mongoose.connect(Config['address'], mongoConfig);
+
+    let connect = mongoose.connect(Config['address'], mongoConfig);
     mongoose.connection.on('error', catchError);
 
-    return mongoose;
+    return connect;
 }
 
 function catchError(err) {
     throw err;
 }
 
-let connector = new StorageConnector(Config);
+let connect = new StorageConnector(Config);
 
 require('@models/Suggestion');
 require('@models/SuggestionStatus');
 require('@models/UserRole');
 require('@models/User');
 
-module.exports = connector;
+module.exports = connect;

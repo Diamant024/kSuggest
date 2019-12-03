@@ -26,26 +26,28 @@ function getList(options) {
  */
 function create(options) {
 
-    let query = SuggestionModel.create({
+    this.beforeExec(null, options);
+
+    return SuggestionModel.create({
         _id: new mongoose.Types.ObjectId(),
         name: options.name,
         description: options.description,
         creator: options.creatorId
-    });
+    }).then((result) => {
+        this.afterExec(result, options);
 
-    this.beforeExec(query, options);
-
-    return query.exec();
+        return result;
+    })
 }
 
 /**
  * Edit exist Suggestion
- * @param options: { id: String, }
+ * @param options: { id: String, name: String }
  * @returns {Promise<Object>}
  */
 function edit(options) {
 
-    let query = SuggestionModel.findOne({ _id: options.id });
+    let query = SuggestionModel.updateOne({ _id: options.id }, { name: options.name });
 
     this.beforeExec(query, options);
 

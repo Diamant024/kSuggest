@@ -34,7 +34,8 @@ router.get('/create', function(req, res, next) {
 router.get('/edit', function(req, res, next) {
 
     let definition = {
-        id: req.query.id
+        id: req.query.id,
+        name: req.query.name || 'Default'
     };
 
     SuggestionManager(req.userData).edit(definition).then((result) => {
