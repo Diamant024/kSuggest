@@ -1,0 +1,9 @@
+{
+  "mongo_config": {
+    "address": "mongodb://",
+    "db": "",
+    "login": "",
+    "password": ""
+  },
+  "server_port": 3000
+}
