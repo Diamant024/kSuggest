@@ -1,0 +1,6 @@
+{
+  "initiator": ["createSuggestion", "readOnlyOwn", "openDeclined"],
+  "manager": [],
+  "auditor": [],
+  "admin": ["createSuggestion", "readAll", "updateAll"]
+}
