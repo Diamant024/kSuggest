@@ -1,8 +1,8 @@
-const rules = {
+module.exports = {
     'readOwnOnly': {
         'getList': {
             available: true,
-            beforeExec: (query, options) => {
+            beforeExec: (options, query) => {
                 query.find({ creator: options.userId })
             }
         }
@@ -10,27 +10,25 @@ const rules = {
     'setOwnDeclinedToChecking': {
         'edit': {
             available: true,
-            beforeExec: (query, options) => {
+            beforeExec: (options, query) => {
                 console.log(query)
             }
         }
     },
 
-    'readAll': {
+    'read': {
         'getList': {
             available: true
         }
     },
-    'updateAll': {
+    'update': {
         'edit': {
             available: true
         }
     },
-    'createSuggestion': {
+    'create': {
         'create': {
             available: true
         }
     }
 };
-
-module.exports = rules;

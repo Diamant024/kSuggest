@@ -11,10 +11,10 @@ let SuggestionModel = mongoose.model('Suggestion'),
 function getList(options) {
     let query = SuggestionModel.find();
 
-    this.beforeExec(query, options);
+    this.beforeExec(options, query);
 
     return query.exec().then((result) => {
-        this.afterExec(result, options);
+        this.afterExec(options, result);
         return result;
     });
 }
@@ -26,7 +26,7 @@ function getList(options) {
  */
 function create(options) {
 
-    this.beforeExec(null, options);
+    this.beforeExec(options);
 
     return SuggestionModel.create({
         _id: new mongoose.Types.ObjectId(),
@@ -34,7 +34,7 @@ function create(options) {
         description: options.description,
         creator: options.creatorId
     }).then((result) => {
-        this.afterExec(result, options);
+        this.afterExec(options, result);
 
         return result;
     })
@@ -49,13 +49,13 @@ function edit(options) {
 
     let query = SuggestionModel.updateOne({ _id: options.id }, { name: options.name });
 
-    this.beforeExec(query, options);
+    this.beforeExec(options, query);
 
     return query.exec().then((result) => {
         if (!result)
             throw { message: 'Object not found' };
 
-        this.afterExec(result, options);
+        this.afterExec(options, result);
 
         return result;
     })

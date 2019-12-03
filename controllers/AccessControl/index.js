@@ -15,17 +15,17 @@ function AccessControl(permissions, action) {
     return {
         available: actionAvailable,
 
-        beforeExec: () => {
+        beforeExec: function() {
             for (let rule of actionRules) {
                 if (typeof rule.beforeExec === 'function')
-                    rule.beforeExec();
+                    rule.beforeExec.apply(this, arguments);
             }
         },
 
-        afterExec: () => {
+        afterExec: function() {
             for (let rule of actionRules) {
                 if (typeof rule.afterExec === 'function')
-                    rule.afterExec();
+                    rule.afterExec.apply(this, arguments);
             }
         }
     };
