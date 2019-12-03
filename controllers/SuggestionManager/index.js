@@ -3,8 +3,8 @@ const AccessControl = require('@controllers/AccessControl');
 let actions = require('./actions');
 
 /**
- *
- * @param userData: Object { permissions: Array }
+ * Interface for Suggestion management
+ * @param userData: { permissions: Array }
  * @constructor
  */
 function SuggestionManager(userData) {
@@ -14,7 +14,7 @@ function SuggestionManager(userData) {
             let ac = AccessControl(userData.permissions, key);
 
             if (!ac.available)
-                return Promise.reject({ message: 'Action not available' });
+                return Promise.reject({ message: 'Action is not available' });
 
             return value.apply(ac, arguments);
         }
