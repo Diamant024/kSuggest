@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserRoleSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true
@@ -12,4 +12,4 @@ const UserRoleSchema = new mongoose.Schema({
     }
 });
 
-mongoose.model('User', UserRoleSchema);
+mongoose.model('User', UserSchema);
