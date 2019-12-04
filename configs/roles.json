@@ -1,6 +1,6 @@
 {
-  "initiator": ["create", "readOwnOnly", "setOwnDeclinedToChecking"],
+  "initiator": ["createAny", "readOwnOnly", "setOwnDeclinedToChecking"],
   "manager": [],
   "auditor": [],
-  "admin": ["create", "read", "update", "setOwnDeclinedToChecking"]
+  "admin": ["createAny", "readAny", "updateAny"]
 }

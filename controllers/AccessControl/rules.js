@@ -1,34 +1,39 @@
+const FullAccess = {
+    available: true,
+    beforeExec: () => true,
+    afterExec: () => true
+};
+
 module.exports = {
     'readOwnOnly': {
         'getList': {
-            available: true,
             beforeExec: (options, query) => {
                 query.find({ creator: options.userId })
+
+                return true;
             }
         }
     },
     'setOwnDeclinedToChecking': {
         'edit': {
-            available: true,
             beforeExec: (options, query) => {
-                console.log(query)
+                if (options.status === 'checking') {
+                    query._conditions = { _id: options.id, status: 'declined', creator: options.userId };
+                    query._update = { status: options.status };
+
+                    return true;
+                }
             }
         }
     },
 
-    'read': {
-        'getList': {
-            available: true
-        }
+    'readAny': {
+        'getList': FullAccess
     },
-    'update': {
-        'edit': {
-            available: true
-        }
+    'updateAny': {
+        'edit': FullAccess
     },
-    'create': {
-        'create': {
-            available: true
-        }
+    'createAny': {
+        'create': FullAccess
     }
 };

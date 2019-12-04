@@ -1,5 +1,7 @@
 let rules = require('./rules');
 
+const isNotAvailableError = { message: 'Action is not available' };
+
 function AccessControl(permissions, action) {
 
     let actionRules = permissions.reduce((accum, item) => {
@@ -14,21 +16,28 @@ function AccessControl(permissions, action) {
 
     return {
         available: actionAvailable,
+        availableNext: false,
 
-        beforeExec: function() {
+        beforeExec() {
             for (let rule of actionRules) {
-                if (typeof rule.beforeExec === 'function')
-                    rule.beforeExec.apply(this, arguments);
+                this.callHook(rule.beforeExec, arguments);
             }
+
+            if (!this.availableNext)
+                throw isNotAvailableError
+        },
+        afterExec() {
+            for (let rule of actionRules) {
+                this.callHook(rule.afterExec, arguments);
+            }
+            if (!this.availableNext)
+                throw isNotAvailableError
         },
 
-        afterExec: function() {
-            for (let rule of actionRules) {
-                if (typeof rule.afterExec === 'function')
-                    rule.afterExec.apply(this, arguments);
-            }
+        callHook(hook, args) {
+            if (typeof hook === 'function')
+                this.availableNext = this.availableNext || !!hook.apply(null, args);
         }
     };
 }
-
 module.exports = AccessControl;

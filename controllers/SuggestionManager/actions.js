@@ -8,15 +8,16 @@ let SuggestionModel = mongoose.model('Suggestion'),
  * @param options: { userId: String }
  * @returns {Promise<Array>}
  */
-function getList(options) {
+async function getList(options) {
     let query = SuggestionModel.find();
 
     this.beforeExec(options, query);
 
-    return query.exec().then((result) => {
-        this.afterExec(options, result);
-        return result;
-    });
+    let result = await query.exec();
+
+    this.afterExec(options, result);
+
+    return result;
 }
 
 /**
@@ -24,20 +25,20 @@ function getList(options) {
  * @param options: { name: String, description: String, creatorId: String }
  * @returns {Promise<Object>}
  */
-function create(options) {
+async function create(options) {
 
     this.beforeExec(options);
 
-    return SuggestionModel.create({
+    let result = await SuggestionModel.create({
         _id: new mongoose.Types.ObjectId(),
         name: options.name,
         description: options.description,
         creator: options.creatorId
-    }).then((result) => {
-        this.afterExec(options, result);
+    });
 
-        return result;
-    })
+    this.afterExec(options, result);
+
+    return result;
 }
 
 /**
@@ -45,20 +46,28 @@ function create(options) {
  * @param options: { id: String, name: String }
  * @returns {Promise<Object>}
  */
-function edit(options) {
+async function edit(options) {
 
-    let query = SuggestionModel.updateOne({ _id: options.id }, { name: options.name });
+    let searchDef = { _id: options.id },
+        updateDef = {
+            name: options.name,
+            status: options.status,
+            highPriority: options.highPriority,
+            description: options.description
+        };
+
+    let query = SuggestionModel.updateOne(searchDef, updateDef);
 
     this.beforeExec(options, query);
 
-    return query.exec().then((result) => {
-        if (!result)
-            throw { message: 'Object not found' };
+    let result = await query.exec();
 
-        this.afterExec(options, result);
+    if (!result.nModified)
+        throw { message: 'Object not found' };
 
-        return result;
-    })
+    this.afterExec(options, result);
+
+    return result;
 }
 
 module.exports = {

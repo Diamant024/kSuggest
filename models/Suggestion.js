@@ -9,9 +9,17 @@ const SuggestionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    /*
     status: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'SuggestionStatus'
+        ref: 'SuggestionStatus',
+        required: true
+    },
+    -- temporarily simplified --
+    */
+    status: {
+        type: String,
+        required: true
     },
     highPriority: {
         type: Boolean,
@@ -20,7 +28,7 @@ const SuggestionSchema = new mongoose.Schema({
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        //required: true
+        required: true
     }
 }, {
     timestamps: true
