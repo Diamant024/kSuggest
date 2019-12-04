@@ -1,32 +1,21 @@
 const express = require('express'),
     router = express.Router();
 
-const mongoose = require('mongoose'),
-    UserModel = mongoose.model('User');
+const UserControl = require('@controllers/UserControl');
 
-const jwt = require('jsonwebtoken');
+router.get('/', function(req, res, next) {
 
-const secret = 'secret';
+    let username = req.query.username || 'diamant',
+        role = req.query.role || 'initiator';
 
+    UserControl.getToken(username, role).then((token) => {
 
-router.get('/', async function(req, res, next) {
+        res.cookie('session', token);
+        res.send({ message: 'Cookie setted' });
 
-    let user = await UserModel.findOne({ username: req.query.username }).exec();
-
-    if (!user)
-        return res.status(400).send({ message: 'User not found' });
-
-    let data = {
-        username: req.query.username || 'admin',
-        role: req.query.role,
-        id: user._id.toString()
-    };
-
-    const token = jwt.sign(data, secret, { expiresIn: "24h" });
-
-    res.cookie('session', token);
-
-    res.send({ message: 'Cookie setted', data });
+    }).catch((err) => {
+        return res.status(400).send({ message: err.message });
+    });
 });
 
 module.exports = router;
